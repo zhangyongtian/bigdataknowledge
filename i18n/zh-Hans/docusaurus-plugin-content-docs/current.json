@@ -1,0 +1,54 @@
+{
+  "sidebar.docSidebar.category.DeveloperGuide": {
+    "message": "开发者指南",
+    "description": "The label for category Quick Start in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.DataQuality": {
+    "message": "数据质量",
+    "description": "The label for category Quick Start in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.DataIntegration": {
+    "message": "数据集成",
+    "description": "The label for category Configuration Center in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.Loader": {
+    "message": "数据开发",
+    "description": "The label for category Loader in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.Release Plan": {
+    "message": "BI报表",
+    "description": "The label for category Release Plan in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.Dev Guide": {
+    "message": "平台监控",
+    "description": "The label for category Release Plan in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.Business Image Construction Process": {
+    "message": "业务镜像构建流程",
+    "description": "The label for category Business Image Construction Process in sidebar docSidebar"
+  },
+  "version.label": {
+    "message": "最新版本(unreleased)",
+    "description": "The label for version current"
+  },
+  "sidebar.docSidebar.category.Loader.link.generated-index.description": {
+    "message": "Examples demonstrating the usage of CLI commands.",
+    "description": "The generated-index page description for category Loader in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.Add Service": {
+    "message": "添加服务",
+    "description": "The label for category Create Wrapper in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.Alert Manage": {
+    "message": "告警管理",
+    "description": "The label for category Create Wrapper in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.Service Manage": {
+    "message": "服务管理",
+    "description": "The label for category Create Wrapper in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.Security Manage": {
+    "message": "安全认证",
+    "description": "The label for category Create Wrapper in sidebar docSidebar"
+  }
+}
