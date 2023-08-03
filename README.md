@@ -44,4 +44,17 @@ https://markdown.com.cn/intro.html#markdown-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F
 ### Git learn
 https://learngitbranching.js.org/?locale=zh_CN
 
+### Project effect address
+https://zhangyongtian.github.io/
 
+If there is a problem, I hope to be able to submit your PR :joy:
+
+### How to modify this item
+| file      | Description |
+| ----------- | ----------- |
+| sidebars.js      | Add a new directory, such as adding new things in ./docs, declare it here       |
+| docusaurus.config.js   | The configuration of the first page of the file, the specified location for document storage, and the corresponding charts, etc.        |
+| ./src   | Related configuration of static website home page        |
+| ./i18n   | Configuration of static website homepage's foot and head        |
+| ./docs   | The configuration of the first page of the file, the specified location for document storage, and the corresponding charts, etc.        |
+| ./blog  | The specific content of the document        |
