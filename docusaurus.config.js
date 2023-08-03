@@ -29,7 +29,8 @@ const config = {
   tagline: '致力于规范大数据数据质量标准、集成、开发、管理、监控以及部署知识库，帮助您快速构建起稳定、高效、可弹性伸缩的大数据平台',
   url: 'https://zhangyongtian.github.io/',
   //这里部署的时候要修改成 baseUrl: '/'
-  baseUrl: '/BigdataKnowledge-website/',
+  //这里部署的时候要修改成 baseUrl: '/BigdataKnowledge-website/'
+  baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/brand.png',
@@ -81,7 +82,7 @@ const config = {
           versions: {
             current: {
             label: '最新版本(unreleased)',
-            path: 'current',
+            path: '',
             },
           },
           path: "docs",
@@ -119,7 +120,7 @@ const config = {
         title: 'BigdataKnowledge',
         logo: {
           alt: 'BigdataKnowledge Logo',
-          src: 'img/brand.png',
+          src: 'img/brand1.png',
         },
         items: [
           {
@@ -127,7 +128,7 @@ const config = {
             docId: '概览',
             position: 'left',
             label: 'Docs',
-            activeBasePath: "docs/current"
+            activeBasePath: "docs"
           },
         // {
         //   type: 'docsVersionDropdown',
@@ -151,7 +152,7 @@ const config = {
             items: [
               {
                 label: 'Docs',
-                to: '/docs/current/概览',
+                to: '/docs/概览',
               },
             ],
           },
@@ -164,7 +165,7 @@ const config = {
               // },
               {
                 label: 'Github Discussion',
-                href: 'https://github.com/BigdataKnowledge/BigdataKnowledge',
+                href: 'https://github.com/zhangyongtian/bigdataknowledge',
               },
               // {
               //   label: 'Twitter',
@@ -181,7 +182,7 @@ const config = {
               },
               {
                 label: 'GitHub Issues',
-                href: 'https://github.com/BigdataKnowledge/BigdataKnowledge/issues',
+                href: 'https://github.com/zhangyongtian/bigdataknowledge',
               },
             ],
           },
