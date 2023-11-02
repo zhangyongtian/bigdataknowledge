@@ -33,7 +33,7 @@ const config = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/brand.png',
+  favicon: 'img/favicon.ico',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -90,7 +90,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/BigdataKnowledge/BigdataKnowledge-website/tree/main',
+            'https://github.com/zhangyongtian/bigdataknowledge/tree/dev',
         },
         blog: {
           showReadingTime: true,
@@ -99,7 +99,7 @@ const config = {
           blogSidebarTitle: '全部博文',
           blogSidebarCount: 'ALL',
           editUrl:
-            'https://github.com/BigdataKnowledge/BigdataKnowledge-websiter/tree/main',
+            'https://github.com/zhangyongtian/bigdataknowledge/tree/dev',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -120,7 +120,7 @@ const config = {
         title: 'BigdataKnowledge',
         logo: {
           alt: 'BigdataKnowledge Logo',
-          src: 'img/brand1.png',
+          src: 'img/logo.svg',
         },
         items: [
           {

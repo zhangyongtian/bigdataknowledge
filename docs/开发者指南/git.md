@@ -1,6 +1,6 @@
 ---
 slug: git
-title: 团队提交代码规范
+title: 参与开源的那些事？
 authors: sea-wyq
 tags: [git]
 ---
@@ -40,9 +40,12 @@ GitHub 上的项目都有一个 Fork 按钮，我们需要先将开源项目 for
 
 ### 第二步：克隆项目仓库到本地
 ```bash
-git clone https://github.com/sea-wyq/aiges.git
-cd aiges 
-git remote add upstream https://github.com/test/aiges.git
+git clone git@github.com:zhangyongtian/bigdataknowledge.git
+cd bigdataknowledge 
+
+#下面这一步如果是正常git clone的话那么不用执行，下面的命令还能在使用http的方式切换成ssh的方式
+git remote set-url origin https://github.com/zhangyongtian/bigdataknowledge.git
+git remote set-url origin git@github.com:zhangyongtian/bigdataknowledge.git
 ```
 如果你配置好了 ssh 方式来 clone 代码，当然，git clone 命令用的 url 可以改成：git@github.com:test/aiges.git。
 
@@ -52,10 +55,8 @@ git remote -v
 ```
 
 ```bash
-origin https://github.com/sea-wyq/aiges.git (fetch)
-origin https://github.com/sea-wyq/aiges.git (push)
-upstream https://github.com/test/aiges.git (fetch)
-upstream https://github.com/test/aiges.git (push)
+origin  git@github.com:zhangyongtian/bigdataknowledge.git (fetch)
+origin  git@github.com:zhangyongtian/bigdataknowledge.git (push)
 ```
 记住啰，你本地的代码变更永远只提交到 origin，然后通过 origin 提交 Pull Request 到 upstream。
 
@@ -65,11 +66,9 @@ upstream https://github.com/test/aiges.git (push)
 
 更新本地 main 分支代码：
 ```
-git fetch upstream
-git checkout main
-git rebase upstream/main
+git pull
 ```
-当然，我不建议你直接在 main 分支写代码，虽然你的第一个 PR 从 main 提交完全没有问题，但是如果你需要同时提交 2 个 PR 呢？总之鼓励新增一个 feat-xxx 或者 fix-xxx 等更可读的分支来完成开发工作。
+**当然，我不建议你直接在 main 分支写代码**，虽然你的第一个 PR 从 main 提交完全没有问题，但是如果你需要同时提交 2 个 PR 呢？总之鼓励新增一个 feat-xxx 或者 fix-xxx 等更可读的分支来完成开发工作。
 
 创建分支：
 
@@ -78,7 +77,7 @@ git checkout -b feat-xxx
 ```
 这样，我们就得到了一个和上游 main 分支代码一样的特性分支 feat-xxx 了，接着可以开始愉快地写代码啦！
 
-### 第四步：写代码
+### 第四步：写代码（避免不必要的问题写代码前，创建一个新的分支）
 
 没啥好说的，写就是了，写！
 
@@ -88,7 +87,9 @@ git checkout -b feat-xxx
 ```bash
 git add <file>
 git commit -s -m "some description here"
-git push origin branchName
+#push执行先对主分支进行merge操作，先执行上面的修改commit操作以后才能够执行merger操作
+git merge master
+git push
 ```
 当然，这里大家需要理解这几个命令和参数的含义，灵活调整。比如你也可以用 git add --all 完成 add 步骤，在 push 的时候也可以加 -f 参数，用来强制覆盖远程分支（假如已经存在，但是 commits 记录不合你意）。但是请记得 git commit 的 -s 参数一定要加哦！
 
@@ -220,7 +221,7 @@ Successfully rebased and updated refs/heads/feat-1.
 
 好，我们在本地确认 commits 已经完成合并，这时候就可以继续推送到远程，让 PR 也更新掉：
 ```bash
-git push -f origin feat-xxx
+git push -f
 ```
 这里需要有一个-f参数来强制更新，合并了 commits 本质也是一种冲突，需要冲掉远程旧的 commits 记录。
 

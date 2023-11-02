@@ -6,7 +6,7 @@ import Translate, {translate} from '@docusaurus/Translate';
 const FeatureList = [
   {
     title: <Translate>知识的广度</Translate>,
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
         包含大数据生态的多种知识和解决方案。
@@ -51,7 +51,7 @@ const FeatureList = [
   },
   {
     title: <Translate>便捷告警</Translate>,
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
         告警指标。
