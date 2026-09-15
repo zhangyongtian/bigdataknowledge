@@ -20,6 +20,35 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
+// Workaround for cheerio >= 1.0.0 + Node v24 CJS/ESM interop:
+// cheerio 1.x ships as "type": "module" and its CJS shim does not export
+// a `default` key, but @easyops-cn/docusaurus-search-local (0.33.x) uses
+// tslib.__importDefault() to unwrap the module and then reads
+// `cheerio.default.load(...)` — which becomes undefined and throws:
+//   TypeError: Cannot read properties of undefined (reading 'load')
+// Fix: install a one-shot require shim that patches `default` onto the
+// cheerio CJS exports the first time it is loaded.
+(function patchCheerioDefaultForNode24() {
+  try {
+    const Module = require('module');
+    const origResolve = Module._resolveFilename;
+    let patched = false;
+    Module._resolveFilename = function (request, parent, isMain, options) {
+      const filename = origResolve.call(this, request, parent, isMain, options);
+      if (!patched && request === 'cheerio' && typeof filename === 'string') {
+        const cacheKey = filename;
+        // Ensure the module is loaded through normal require first.
+        const mod = require(filename);
+        if (mod && typeof mod.load === 'function' && mod.default === undefined) {
+          mod.default = mod;
+        }
+        patched = true;
+      }
+      return filename;
+    };
+  } catch (_) { /* ignore if patching fails (e.g. exotic runtimes) */ }
+})();
+
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
