@@ -155,7 +155,8 @@ git push origin feat-xxx
 ![img](imgs/rebase.png)
 这时候我们可以通过 rebase 命令来完成2个 commits 的合并：
 ```bash
-git rebase -i HEAD~2
+git rebase -i HEAD~2 
+git rebase -i d640931 （这个可以直接指定你先要合并的那个分支为止）也就是当前提交到d640931
 ```
 执行这个命令会进入一个编辑页面，默认是 vim 编辑模式，内容大致如下：
 ```bash
@@ -179,12 +180,14 @@ pick 9b7d63b docs: just fortest
 #
 # However, if you remove everything, the rebase will be aborted.
 ```
-我们需要把第二个 pick 改成 s，然后保存退出（vim 的 wq 命令）：
+我们需要把第二个 pick 改成 s，改成s表示现在这个分支合并的前面一个分支，如果有多个分支的时候，像下面的情况，那么就是把下面3个s的所有提交合并到3114c0f提交，然后保存退出（vim 的 wq 命令）：
 ```
-pick 3114c0f docs: just fortest
+pick 3114c0f docs: just fortest（第一个提交）
 s 9b7d63b docs: just fortest
+s 3114c0f docs: just fortest
+s 9b7d63b docs: just fortest （最新提交）
 ```
-接着会进入第二个编辑页面：
+接着会进入第二个编辑页面（这个页面是所有提交的信息，看情况保留一个提交的message就行了）：
 ```bash
 # This is a combination of 2 commits.
 # This is the 1st commit message:
@@ -224,6 +227,14 @@ Successfully rebased and updated refs/heads/feat-1.
 git push -f
 ```
 这里需要有一个-f参数来强制更新，合并了 commits 本质也是一种冲突，需要冲掉远程旧的 commits 记录。
+
+如果上面的修改操作没有成功
+
+```
+ git rebase --edit-todo 继续编辑
+
+ git rebase --continue  继续合并
+```
 
 ### PR 产生了冲突，如何解决？
 

@@ -23,6 +23,9 @@
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
+const math = require('remark-math');
+const katex = require('rehype-katex');
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: '大数据知识库',
@@ -34,6 +37,16 @@ const config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
+
+  stylesheets: [
+    {
+      href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
+      type: 'text/css',
+      integrity:
+        'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
+      crossorigin: 'anonymous',
+    },
+  ],
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -91,6 +104,8 @@ const config = {
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/zhangyongtian/bigdataknowledge/tree/dev',
+          beforeDefaultRemarkPlugins: [math],
+          rehypePlugins: [katex],
         },
         blog: {
           showReadingTime: true,
@@ -100,12 +115,56 @@ const config = {
           blogSidebarCount: 'ALL',
           editUrl:
             'https://github.com/zhangyongtian/bigdataknowledge/tree/dev',
+          beforeDefaultRemarkPlugins: [math],
+          rehypePlugins: [katex],
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
       }),
     ],
+  ],
+
+  // Workaround for Node v24 + webpack5 + Docusaurus 2.4：
+  // Docusaurus 2.4 内部会给 webpack.ProgressPlugin 传 { name, color, reporters, reporter }
+  // 这些老字段，但 Node v24 里 webpack5 的 schema-utils 不认，直接报 ValidationError。
+  // 解决方案：注册一个临时的 Docusaurus 插件，用它的 configureWebpack() 钩子拿到最终
+  // webpack config 的引用，遍历 plugins 数组找到 ProgressPlugin 实例，重建一个只含
+  // 合法 schema 字段（handler / percentBy / modules / progressBar …）的新实例。
+  plugins: [
+    function pluginNode24ProgressFix(context, opts) {
+      return {
+        name: 'node24-progress-plugin-fix',
+        configureWebpack(config, isServer, utils) {
+          const { ProgressPlugin } = require('webpack');
+          if (!Array.isArray(config.plugins)) return {};
+          for (let i = 0; i < config.plugins.length; i++) {
+            const p = config.plugins[i];
+            if (p instanceof ProgressPlugin && p.options) {
+              const old = p.options;
+              const clean = {};
+              for (const k of ['handler', 'percentBy', 'activeModules',
+                               'dependencies', 'dependenciesCount', 'entries',
+                               'estimatedTime', 'modules', 'modulesCount',
+                               'phaseTimings', 'profile', 'progressBar']) {
+                if (k in old) clean[k] = old[k];
+              }
+              const reporters = (Array.isArray(old.reporters) ? old.reporters : [])
+                .concat((typeof old.reporter === 'function') ? [old.reporter] : []);
+              if (reporters.length) {
+                const prev = typeof clean.handler === 'function' ? clean.handler : null;
+                clean.handler = (pct, msg, ...args) => {
+                  if (prev) prev(pct, msg, ...args);
+                  for (const r of reporters) { try { r(pct, msg, ...args); } catch (_) {} }
+                };
+              }
+              config.plugins[i] = new ProgressPlugin(clean);
+            }
+          }
+          return {};
+        },
+      };
+    },
   ],
 
   themeConfig:

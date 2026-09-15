@@ -67,7 +67,7 @@ total 184536
 ```
 
 ```
-rpm  -ivh  *.rpm --nodeps --force
+sudo rpm  -ivh  *.rpm --nodeps --force
 ```
 
 查看mysql安装的位置
@@ -86,17 +86,15 @@ systemctl status mysqld
 目录授权,这里是存储数据的地方，在/etc/my.cnf中配置。如果权限不够，那么会启动不起来。
 
 ```
-chmod 777 -R /var/lib/mysql
+sudo chmod 777 -R /var/lib/mysql
 ```
 
 修改配置，添加最大的连接数
 ```
 vi /etc/my.cnf
-
+validate_password_policy=0
+validate_password_length=1
 max_connections = 2000
-
-vi  /usr/lib/systemd/system/mysqld.service
-LimitNOFILE=65535
 ```
 
 初始化mysql
@@ -107,11 +105,20 @@ sudo yum install libaio
 mysqld --initialize --console
 ```
 
+查看Mysql的密码。运行时出错，也可以查看这个文件。
+
+```
+cat /var/log/mysqld.log
+
+2023-10-28T09:28:08.553828Z 1 [Note] A temporary password is generated for root@localhost: /fhl:;!3;y_G
+```
 
 启动mysql
 ```
-
+systemctl stop mysqld
 systemctl start mysqld
+systemctl enable mysqld
+systemctl status mysqld
 ```
 
 登录mysql
@@ -137,4 +144,23 @@ FLUSH privileges;
 CREATE USER 'hive'@'%'   IDENTIFIED BY 'hive'  WITH MAX_USER_CONNECTIONS 1000;
 grant all privileges on *.* to 'hive'@'%' with grant option;
 FLUSH PRIVILEGES;
+```
+
+### 卸载mysql
+
+```
+rpm -qa|grep mysql
+
+sudo yum remove $(rpm -qa|grep mysql)
+
+rm -rf /var/lib/mysql/*
+```
+
+
+## 常见报错
+下面的报错是因为存储目录没有写入权限。
+
+```
+2023-10-28T10:08:53.327713Z 0 [ERROR] InnoDB: The innodb_system data file 'ibdata1' must be writable
+2023-10-28T10:08:53.327725Z 0 [ERROR] InnoDB: The innodb_system data file 'ibdata1' must be writable
 ```

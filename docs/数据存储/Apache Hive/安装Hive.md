@@ -37,7 +37,7 @@ source /etc/profile.d/my_env.sh
 解决hadoop依赖冲突问题
 
 ```
-cd lib
+cd /home/bigdata/module/apache-hive-3.1.2-bin/lib
 mv  log4j-slf4j-impl-2.10.0.jar log4j-slf4j-impl-2.10.0.jar.bak
 ```
 
@@ -62,13 +62,13 @@ FLUSH PRIVILEGES;
 vi conf/hive-site.xml
 ```
 
-```
+```xml
 <?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <configuration>
     <property>
         <name>javax.jdo.option.ConnectionURL</name>
-        <value>jdbc:mysql://ip:3306/hivemetastore?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8</value>
+        <value>jdbc:mysql://192.168.61.202:3306/hivemetastore?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8</value>
     </property>
  
     <property>
@@ -105,16 +105,49 @@ vi conf/hive-site.xml
     <!-- H2S运行绑定host -->
     <property>
         <name>hive.server2.thrift.bind.host</name>
-        <value>master1</value>
+        <value>hadoop1</value>
     </property>
  
     <property>
         <name>hive.metastore.event.db.notification.api.auth</name>
         <value>false</value>
     </property>
+
+    <property>
+        <!-- 在命令行中，显示当前操作的数据库 -->
+        <name>hive.cli.print.current.db</name>
+        <value>true</value>
+        <description>Whether to include the current database in the Hive prompt.</description>
+     </property>
+
+    <property>
+        <!-- 在命令行中，显示数据的表头 -->
+        <name>hive.cli.print.header</name>
+        <value>true</value>
+    </property>
    
+   <property>
+       <!-- 操作小规模数据时，使用本地模式，提高效率 -->
+       <name>hive.exec.mode.local.auto</name>
+       <value>true</value>
+       <description>Let Hive determine whether to run in local mode automatically</description>
+    </property>
+
+    <property>
+       <name>hive.cli.print.delimiter</name>
+       <value>|</value>
+    </property>
+
 </configuration>
 ```
+
+> 备注：当 Hive 的输入数据量非常小时，Hive 通过本地模式在单台机器上处理所有的任务。对于小数据集，执行时间会明显被缩短。当一个job满足如下条件才能真正使。
+
+用本地模式：
+
+- job的输入数据量必须小于参数：hive.exec.mode.local.auto.inputbytes.max(默认128MB)。
+- job的map数必须小于参数：hive.exec.mode.local.auto.tasks.max (默认4)。
+- job的reduce数必须为0或者1。
 
 初始化元数据
 
@@ -130,6 +163,16 @@ exit;
 schematool -initSchema -dbType mysql -verbose
 ```
 
+### 修改日志位置
+
+Hive的log默认存放在 /tmp/root 目录下（root为当前用户名）；这个位置可以修改。
+
+```
+cp /home/bigdata/module/apache-hive-3.1.2-bin/conf/hive-log4j2.properties.template /home/bigdata/module/apache-hive-3.1.2-bin/conf/hive-log4j2.properties
+vi /home/bigdata/module/apache-hive-3.1.2-bin/conf/hive-log4j2.properties
+# 添加以下内容：
+property.hive.log.dir = /home/bigdata/module/apache-hive-3.1.2-bin/logs
+```
 ### 启动
 
 ```
